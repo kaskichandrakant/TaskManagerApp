@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UITableViewController {
     let cellId = "cellId"
-    var items: [String] = ["some thing" , "some another thing"]
+    var items: [String] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -24,8 +24,13 @@ class ViewController: UITableViewController {
         let alertController = UIAlertController(title: "Add new item", message: "write task to add", preferredStyle: .alert)
         let saveAction = UIAlertAction(title: "save", style: .default) {[unowned self] action in
             guard let textField = alertController.textFields?.first , let itemToAdd = textField.text else {return}
+            self.items.append(itemToAdd)
+            self.tableView.reloadData()
         }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
+        alertController.addTextField(configurationHandler: nil)
         alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
         present(alertController, animated: true,completion: nil)
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
