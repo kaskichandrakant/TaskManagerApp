@@ -21,7 +21,12 @@ class ViewController: UITableViewController {
     }
     
     @objc func addItem(_ sender: AnyObject){
-        print("added")
+        let alertController = UIAlertController(title: "Add new item", message: "write task to add", preferredStyle: .alert)
+        let saveAction = UIAlertAction(title: "save", style: .default) {[unowned self] action in
+            guard let textField = alertController.textFields?.first , let itemToAdd = textField.text else {return}
+        }
+        alertController.addAction(saveAction)
+        present(alertController, animated: true,completion: nil)
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
@@ -32,6 +37,5 @@ class ViewController: UITableViewController {
         cell.textLabel?.text = item
         return cell
     }
-    
 }
 
