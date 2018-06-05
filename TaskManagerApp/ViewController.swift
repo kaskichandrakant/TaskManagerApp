@@ -16,8 +16,9 @@ class ViewController: UITableViewController {
         view.backgroundColor = .white
         navigationController?.navigationBar.barTintColor = .red
         navigationController?.navigationBar.tintColor = .white
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "add", style: .plain, target: self, action: #selector(addItem))
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(addItem))
+    tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        
     }
     
     @objc func addItem(_ sender: AnyObject){
@@ -27,6 +28,7 @@ class ViewController: UITableViewController {
             self.add(itemToAdd: item)
             self.tableView.reloadData()
         }
+        
         alertController.addTextField(configurationHandler: nil)
         alertController.addAction(saveAction)
         present(alertController, animated: true,completion: nil)
@@ -45,12 +47,33 @@ class ViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        let item = items[indexPath.row]
-        cell.textLabel?.text = item
+        let itemsToShow = items.reversed()[indexPath.row]
+        cell.textLabel?.text = itemsToShow
         return cell
     }
+    
     func add(itemToAdd: String){
+        if isAlreadyPresent(search: itemToAdd){
+            items.remove(at: items.index(of: itemToAdd)!)
+            items.append(itemToAdd)
+            return
+        }
+        if doseExceedsLimit(limit: 4){
+            items.append(itemToAdd)
+            items.remove(at: 0)
+            return
+        }
         items.append(itemToAdd)
+    }
+    
+    func addSearch(item: String){
+        items.append(item)
+    }
+    func isAlreadyPresent(search: String) -> Bool{
+        return items.contains(search)
+    }
+    func doseExceedsLimit(limit: Int )-> Bool{
+        return items.count >= limit
     }
 }
 
